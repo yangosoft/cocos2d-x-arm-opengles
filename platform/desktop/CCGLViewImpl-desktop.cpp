@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-****************************************************************************/
+ ****************************************************************************/
 
 #include "CCGLViewImpl-desktop.h"
 #include <iostream>
@@ -46,7 +46,7 @@ NS_CC_BEGIN
 class GLFWEventHandler
 {
 public:
-   
+
 
 private:
     static GLViewImpl* _view;
@@ -63,58 +63,58 @@ struct keyCodeItem
 };
 
 
-static GLboolean m_true[]  __attribute__ ((aligned (16))) = { true, true, true, true };
-static GLboolean m_mask[]  __attribute__ ((aligned (16))) = { true, true, true, false};
-static GLfloat 	 m_zero[]  __attribute__ ((aligned (16))) = { 0.0f, 0.0f, 0.0f, 0.0f };
+static GLboolean m_true[] __attribute__((aligned(16))) = {true, true, true, true};
+static GLboolean m_mask[] __attribute__((aligned(16))) = {true, true, true, false};
+static GLfloat m_zero[] __attribute__((aligned(16))) = {0.0f, 0.0f, 0.0f, 0.0f};
 
-static GLenum 		mui_ActiveTexture;
-static GLuint 		mui_CurrTexture;
-static GLenum 		m_DepthFunc;
-static bool 		mb_DepthMask;
-static uint32_t 	mui_BlendSrcRGB;
-static uint32_t 	mui_BlendDstRGB;
-static uint32_t 	mui_BlendSrcAlpha;
-static uint32_t 	mui_BlendDstAlpha;
-static GLfloat 		m_ClearColor[]	= {  0.0f,  0.0f,  0.0f,  0.0f };
-static GLboolean	m_ColorMask[] 	= { GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE };
-static GLint		m_Viewport[]  	= { -1, -1, -1, -1 };
-static GLint		m_Scissor[]  	= { -1, -1, -1, -1 };
-static GLuint		mui_Program		= 0;
+static GLenum mui_ActiveTexture;
+static GLuint mui_CurrTexture;
+static GLenum m_DepthFunc;
+static bool mb_DepthMask;
+static uint32_t mui_BlendSrcRGB;
+static uint32_t mui_BlendDstRGB;
+static uint32_t mui_BlendSrcAlpha;
+static uint32_t mui_BlendDstAlpha;
+static GLfloat m_ClearColor[] = {0.0f, 0.0f, 0.0f, 0.0f};
+static GLboolean m_ColorMask[] = {GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE};
+static GLint m_Viewport[] = {-1, -1, -1, -1};
+static GLint m_Scissor[] = {-1, -1, -1, -1};
+static GLuint mui_Program = 0;
 
-
-void GlColorMask (GLboolean _bR, GLboolean _bG, GLboolean _bB, GLboolean _bA)
+void GlColorMask(GLboolean _bR, GLboolean _bG, GLboolean _bB, GLboolean _bA)
 {
-	bool bChange = 		(m_ColorMask[0] != _bR)
-					||	(m_ColorMask[1] != _bG)
-					||	(m_ColorMask[2] != _bB)
-					||	(m_ColorMask[3] != _bA);
+    bool bChange = (m_ColorMask[0] != _bR)
+            || (m_ColorMask[1] != _bG)
+            || (m_ColorMask[2] != _bB)
+            || (m_ColorMask[3] != _bA);
 
-	if (bChange)
-	{
-		m_ColorMask[0] = _bR;
-		m_ColorMask[1] = _bG;
-		m_ColorMask[2] = _bB;
-		m_ColorMask[3] = _bA;
+    if (bChange)
+    {
+        m_ColorMask[0] = _bR;
+        m_ColorMask[1] = _bG;
+        m_ColorMask[2] = _bB;
+        m_ColorMask[3] = _bA;
 
-		glColorMask (_bR, _bG, _bB, _bA);
-	}
+        glColorMask(_bR, _bG, _bB, _bA);
+    }
 }
-void GlClearColor (GLfloat _fR, GLfloat _fG, GLfloat _fB, GLfloat _fA)
+
+void GlClearColor(GLfloat _fR, GLfloat _fG, GLfloat _fB, GLfloat _fA)
 {
-	bool bChange = 		(m_ClearColor[0] != _fR)
-					||	(m_ClearColor[1] != _fG)
-					||	(m_ClearColor[2] != _fB)
-					||	(m_ClearColor[3] != _fA);
+    bool bChange = (m_ClearColor[0] != _fR)
+            || (m_ClearColor[1] != _fG)
+            || (m_ClearColor[2] != _fB)
+            || (m_ClearColor[3] != _fA);
 
-	if (bChange)
-	{
-		m_ClearColor[0] = _fR;
-		m_ClearColor[1] = _fG;
-		m_ClearColor[2] = _fB;
-		m_ClearColor[3] = _fA;
+    if (bChange)
+    {
+        m_ClearColor[0] = _fR;
+        m_ClearColor[1] = _fG;
+        m_ClearColor[2] = _fB;
+        m_ClearColor[3] = _fA;
 
-		glClearColor (_fR, _fG, _fB, _fA);
-	}
+        glClearColor(_fR, _fG, _fB, _fA);
+    }
 }
 
 // static std::unordered_map<int, EventKeyboard::KeyCode> g_keyCodeMap;
@@ -253,7 +253,6 @@ static keyCodeItem g_keyCodeStructArray[] = {
 // implement GLViewImpl
 //////////////////////////////////////////////////////////////////////////
 
-
 GLViewImpl::GLViewImpl(bool initglfw)
 : _captured(false)
 , _supportTouch(false)
@@ -267,32 +266,33 @@ GLViewImpl::GLViewImpl(bool initglfw)
 , _mouseY(0.0f)
 {
     _viewName = "cocos2dx";
-//     g_keyCodeMap.clear();
-//     for (auto& item : g_keyCodeStructArray)
-//     {
-//         g_keyCodeMap[item.glfwKeyCode] = item.keyCode;
-//     }
-// 
-//     GLFWEventHandler::setGLViewImpl(this);
-//     if (initglfw)
-//     {
-//         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
-//         glfwInit();
-//     }
+    //     g_keyCodeMap.clear();
+    //     for (auto& item : g_keyCodeStructArray)
+    //     {
+    //         g_keyCodeMap[item.glfwKeyCode] = item.keyCode;
+    //     }
+    // 
+    //     GLFWEventHandler::setGLViewImpl(this);
+    //     if (initglfw)
+    //     {
+    //         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
+    //         glfwInit();
+    //     }
 }
 
 GLViewImpl::~GLViewImpl()
 {
     CCLOGINFO("deallocing GLViewImpl: %p", this);
-//     GLFWEventHandler::setGLViewImpl(nullptr);
-//     glfwTerminate();
+    //     GLFWEventHandler::setGLViewImpl(nullptr);
+    //     glfwTerminate();
 }
 
 GLViewImpl* GLViewImpl::create(const std::string& viewName)
 {
-	printf("%s\n",__FUNCTION__);
+    printf("%s\n", __FUNCTION__);
     auto ret = new (std::nothrow) GLViewImpl;
-    if(ret && ret->initWithRect(viewName, Rect(0, 0, 1280, 720), 1)) {
+    if (ret && ret->initWithRect(viewName, Rect(0, 0, 1280, 720), 1))
+    {
         ret->autorelease();
         return ret;
     }
@@ -302,9 +302,10 @@ GLViewImpl* GLViewImpl::create(const std::string& viewName)
 
 GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, Rect rect, float frameZoomFactor)
 {
-	printf("%s\n",__FUNCTION__);
+    printf("%s\n", __FUNCTION__);
     auto ret = new (std::nothrow) GLViewImpl;
-    if(ret && ret->initWithRect(viewName, rect, frameZoomFactor)) {
+    if (ret && ret->initWithRect(viewName, rect, frameZoomFactor))
+    {
         ret->autorelease();
         return ret;
     }
@@ -314,9 +315,10 @@ GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, Rect rect, f
 
 GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
 {
-	printf("%s\n",__FUNCTION__);
+    printf("%s\n", __FUNCTION__);
     auto ret = new (std::nothrow) GLViewImpl();
-    if(ret && ret->initWithFullScreen(viewName)) {
+    if (ret && ret->initWithFullScreen(viewName))
+    {
         ret->autorelease();
         return ret;
     }
@@ -324,242 +326,238 @@ GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
     return nullptr;
 }
 
-
-
 bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor)
 {
-	printf("%s\n",__FUNCTION__);
-	return initWithFullScreen(viewName);
-	
+    printf("%s\n", __FUNCTION__);
+    return initWithFullScreen(viewName);
+
     setViewName(viewName);
 
     _frameZoomFactor = frameZoomFactor;
-	
-	
-	
 
-//     glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
-//     glfwWindowHint(GLFW_RED_BITS,_glContextAttrs.redBits);
-//     glfwWindowHint(GLFW_GREEN_BITS,_glContextAttrs.greenBits);
-//     glfwWindowHint(GLFW_BLUE_BITS,_glContextAttrs.blueBits);
-//     glfwWindowHint(GLFW_ALPHA_BITS,_glContextAttrs.alphaBits);
-//     glfwWindowHint(GLFW_DEPTH_BITS,_glContextAttrs.depthBits);
-//     glfwWindowHint(GLFW_STENCIL_BITS,_glContextAttrs.stencilBits);
-// 
-//     int needWidth = rect.size.width * _frameZoomFactor;
-//     int neeHeight = rect.size.height * _frameZoomFactor;
-// 
-//     _mainWindow = glfwCreateWindow(needWidth, neeHeight, _viewName.c_str(), _monitor, nullptr);
-// 
-//     if (_mainWindow == nullptr)
-//     {
-//         std::string message = "Can't create window";
-//         if (!_glfwError.empty())
-//         {
-//             message.append("\nMore info: \n");
-//             message.append(_glfwError);
-//         }
-// 
-//         MessageBox(message.c_str(), "Error launch application");
-//         return false;
-//     }
-// 
-//     /*
-//     *  Note that the created window and context may differ from what you requested,
-//     *  as not all parameters and hints are
-//     *  [hard constraints](@ref window_hints_hard).  This includes the size of the
-//     *  window, especially for full screen windows.  To retrieve the actual
-//     *  attributes of the created window and context, use queries like @ref
-//     *  glfwGetWindowAttrib and @ref glfwGetWindowSize.
-//     *
-//     *  see declaration glfwCreateWindow
-//     */
-//     int realW = 0, realH = 0;
-//     glfwGetWindowSize(_mainWindow, &realW, &realH);
-//     if (realW != needWidth)
-//     {
-//         rect.size.width = realW / _frameZoomFactor;
-//     }
-//     if (realH != neeHeight)
-//     {
-//         rect.size.height = realH / _frameZoomFactor;
-//     }
-// 
-//     glfwMakeContextCurrent(_mainWindow);
-// 
-//     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
-//     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
-//     glfwSetScrollCallback(_mainWindow, GLFWEventHandler::onGLFWMouseScrollCallback);
-//     glfwSetCharCallback(_mainWindow, GLFWEventHandler::onGLFWCharCallback);
-//     glfwSetKeyCallback(_mainWindow, GLFWEventHandler::onGLFWKeyCallback);
-//     glfwSetWindowPosCallback(_mainWindow, GLFWEventHandler::onGLFWWindowPosCallback);
-//     glfwSetFramebufferSizeCallback(_mainWindow, GLFWEventHandler::onGLFWframebuffersize);
-//     glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeFunCallback);
-//     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
-// 
-//     setFrameSize(rect.size.width, rect.size.height);
-// 
-//     // check OpenGL version at first
-//     const GLubyte* glVersion = glGetString(GL_VERSION);
-// 
-//     if ( utils::atof((const char*)glVersion) < 1.5 )
-//     {
-//         char strComplain[256] = {0};
-//         sprintf(strComplain,
-//                 "OpenGL 1.5 or higher is required (your version is %s). Please upgrade the driver of your video card.",
-//                 glVersion);
-//         MessageBox(strComplain, "OpenGL version too old");
-//         return false;
-//     }
-// 
-//     initGlew();
-// 
-//     // Enable point size by default.
-//     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-	 SDL_Init(SDL_INIT_VIDEO);
-	 /*window = SDL_CreateWindow("Test", 0, 0, 400, 300, 0);
-	     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+
+    //     glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
+    //     glfwWindowHint(GLFW_RED_BITS,_glContextAttrs.redBits);
+    //     glfwWindowHint(GLFW_GREEN_BITS,_glContextAttrs.greenBits);
+    //     glfwWindowHint(GLFW_BLUE_BITS,_glContextAttrs.blueBits);
+    //     glfwWindowHint(GLFW_ALPHA_BITS,_glContextAttrs.alphaBits);
+    //     glfwWindowHint(GLFW_DEPTH_BITS,_glContextAttrs.depthBits);
+    //     glfwWindowHint(GLFW_STENCIL_BITS,_glContextAttrs.stencilBits);
+    // 
+    //     int needWidth = rect.size.width * _frameZoomFactor;
+    //     int neeHeight = rect.size.height * _frameZoomFactor;
+    // 
+    //     _mainWindow = glfwCreateWindow(needWidth, neeHeight, _viewName.c_str(), _monitor, nullptr);
+    // 
+    //     if (_mainWindow == nullptr)
+    //     {
+    //         std::string message = "Can't create window";
+    //         if (!_glfwError.empty())
+    //         {
+    //             message.append("\nMore info: \n");
+    //             message.append(_glfwError);
+    //         }
+    // 
+    //         MessageBox(message.c_str(), "Error launch application");
+    //         return false;
+    //     }
+    // 
+    //     /*
+    //     *  Note that the created window and context may differ from what you requested,
+    //     *  as not all parameters and hints are
+    //     *  [hard constraints](@ref window_hints_hard).  This includes the size of the
+    //     *  window, especially for full screen windows.  To retrieve the actual
+    //     *  attributes of the created window and context, use queries like @ref
+    //     *  glfwGetWindowAttrib and @ref glfwGetWindowSize.
+    //     *
+    //     *  see declaration glfwCreateWindow
+    //     */
+    //     int realW = 0, realH = 0;
+    //     glfwGetWindowSize(_mainWindow, &realW, &realH);
+    //     if (realW != needWidth)
+    //     {
+    //         rect.size.width = realW / _frameZoomFactor;
+    //     }
+    //     if (realH != neeHeight)
+    //     {
+    //         rect.size.height = realH / _frameZoomFactor;
+    //     }
+    // 
+    //     glfwMakeContextCurrent(_mainWindow);
+    // 
+    //     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
+    //     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
+    //     glfwSetScrollCallback(_mainWindow, GLFWEventHandler::onGLFWMouseScrollCallback);
+    //     glfwSetCharCallback(_mainWindow, GLFWEventHandler::onGLFWCharCallback);
+    //     glfwSetKeyCallback(_mainWindow, GLFWEventHandler::onGLFWKeyCallback);
+    //     glfwSetWindowPosCallback(_mainWindow, GLFWEventHandler::onGLFWWindowPosCallback);
+    //     glfwSetFramebufferSizeCallback(_mainWindow, GLFWEventHandler::onGLFWframebuffersize);
+    //     glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeFunCallback);
+    //     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
+    // 
+    //     setFrameSize(rect.size.width, rect.size.height);
+    // 
+    //     // check OpenGL version at first
+    //     const GLubyte* glVersion = glGetString(GL_VERSION);
+    // 
+    //     if ( utils::atof((const char*)glVersion) < 1.5 )
+    //     {
+    //         char strComplain[256] = {0};
+    //         sprintf(strComplain,
+    //                 "OpenGL 1.5 or higher is required (your version is %s). Please upgrade the driver of your video card.",
+    //                 glVersion);
+    //         MessageBox(strComplain, "OpenGL version too old");
+    //         return false;
+    //     }
+    // 
+    //     initGlew();
+    // 
+    //     // Enable point size by default.
+    //     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+
+    SDL_Init(SDL_INIT_VIDEO);
+    /*window = SDL_CreateWindow("Test", 0, 0, 400, 300, 0);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     window = SDL_CreateWindow("Demo", 0, 0, 512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
     context = SDL_GL_CreateContext(window);
 	 
-	 if (window == NULL) {
-			fprintf(stderr, "%s\n", SDL_GetError());
-			return false;
-	 }*/ 
-	 
-	 
-	  window = SDL_SetVideoMode(1280,720, 32,  SDL_OPENGLES2);
-// Print out some information about the video surface
-  if (window != NULL)
-  {
-       printf("The current video surface bits per pixel is %d\n",(int)window->format->BitsPerPixel);
-  }
-	
+    if (window == NULL) {
+                   fprintf(stderr, "%s\n", SDL_GetError());
+                   return false;
+    }*/
+
+
+    window = SDL_SetVideoMode(1280, 720, 32, SDL_OPENGLES2);
+    // Print out some information about the video surface
+    if (window != NULL)
+    {
+        printf("The current video surface bits per pixel is %d\n", (int) window->format->BitsPerPixel);
+    }
+
     return true;
 }
 
-
-void GlEnable (GLenum _uiFlag)
+void GlEnable(GLenum _uiFlag)
 {
 
-		glEnable (_uiFlag);
+    glEnable(_uiFlag);
 
 }
 
-void GlScissor (GLint x, GLint y, GLsizei width, GLsizei height)
+void GlScissor(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-	bool bChange = 		(m_Scissor[0] != x)
-					||	(m_Scissor[1] != y)
-					||	(m_Scissor[2] != width)
-					||	(m_Scissor[3] != height);
+    bool bChange = (m_Scissor[0] != x)
+            || (m_Scissor[1] != y)
+            || (m_Scissor[2] != width)
+            || (m_Scissor[3] != height);
 
-	if (bChange)
-	{
-		m_Scissor[0] = x;
-		m_Scissor[1] = y;
-		m_Scissor[2] = width;
-		m_Scissor[3] = height;
+    if (bChange)
+    {
+        m_Scissor[0] = x;
+        m_Scissor[1] = y;
+        m_Scissor[2] = width;
+        m_Scissor[3] = height;
 
-		glScissor (x, y, width, height);
-	}
-}
-void GlViewport	(GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	bool bChange = 		(m_Viewport[0] != x)
-					||	(m_Viewport[1] != y)
-					||	(m_Viewport[2] != width)
-					||	(m_Viewport[3] != height);
-
-	if (bChange)
-	{
-		m_Viewport[0] = x;
-		m_Viewport[1] = y;
-		m_Viewport[2] = width;
-		m_Viewport[3] = height;
-
-		glViewport (x, y, width, height);
-	}
+        glScissor(x, y, width, height);
+    }
 }
 
-
-void GlDisable (GLenum _uiFlag)
+void GlViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-	
-		glDisable (_uiFlag);
-	
+    bool bChange = (m_Viewport[0] != x)
+            || (m_Viewport[1] != y)
+            || (m_Viewport[2] != width)
+            || (m_Viewport[3] != height);
+
+    if (bChange)
+    {
+        m_Viewport[0] = x;
+        m_Viewport[1] = y;
+        m_Viewport[2] = width;
+        m_Viewport[3] = height;
+
+        glViewport(x, y, width, height);
+    }
 }
 
+void GlDisable(GLenum _uiFlag)
+{
+
+    glDisable(_uiFlag);
+
+}
 
 bool GLViewImpl::initWithFullScreen(const std::string& viewName)
 {
-	
-	printf("%s\n",__FUNCTION__);
+
+    printf("%s\n", __FUNCTION__);
     //Create fullscreen window on primary monitor at its current video mode.
-//     _monitor = glfwGetPrimaryMonitor();
-//     if (nullptr == _monitor)
-//         return false;
+    //     _monitor = glfwGetPrimaryMonitor();
+    //     if (nullptr == _monitor)
+    //         return false;
 
-//     const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
-//     return initWithRect(viewName, Rect(0, 0, videoMode->width, videoMode->height), 1.0f);
-	
-	printf("INIT VIDEO\n");
-	//SDL_Init(SDL_INIT_VIDEO);
-	int ret = SDL_InitSubSystem (SDL_INIT_VIDEO);
-	printf("Set video %d\n",ret);
-	  window = SDL_SetVideoMode(1280,720, 32,  SDL_OPENGLES2 | SDL_FULLSCREEN | SDL_HWSURFACE);
-	  
-	  printf("null? %d \n", (window == nullptr));
-	  
-	  
-	  
-	  //SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,   SDL_DOUBLEBUF );
-// Print out some information about the video surface
-  if (window != NULL)
-  {
-	  static SDL_SysWMinfo m_sdl_info;
-       printf("The current video surface bits per pixel is %d\n",(int)window->format->BitsPerPixel);
-	   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,     SDL_OPENGLES2 | SDL_DOUBLEBUF );
-	   memset( &m_sdl_info, 0, sizeof(SDL_SysWMinfo) );
-		SDL_VERSION( &m_sdl_info.version );
-		if( SDL_GetWMInfo( &m_sdl_info ) <= 0 )
-		{
-			printf( "\nError: I require a Window Manager info to create OpenGL/OpenGL-ES contexts.\n\n" );
-			return 0;
-		}
-		
-// 		GlEnable (GL_SCISSOR_TEST);
-// 
-// 		// Clipping disabled.
+    //     const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
+    //     return initWithRect(viewName, Rect(0, 0, videoMode->width, videoMode->height), 1.0f);
 
-		
-		
-	    glEnable(GL_CULL_FACE);
-		glEnable(GL_DEPTH_TEST);
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
- 		GlViewport(0, 0, 1280, 720);
-		
-		SDL_GL_SwapBuffers( );
-		
-		
-// 		GlScissor (0, 0, 1280,720);
-// 		
-// 	    GlDisable (GL_CULL_FACE);
-// 		GlColorMask  (m_true[0], m_true[1], m_true[2], m_true[3]);
-// 		GlClearColor (m_zero[0], m_zero[1], m_zero[2], m_zero[3]);
-// 		glClear 	 (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		
-		
-		
-		return true;
-	
-  }
-	
-	
-	return false;
+    printf("INIT VIDEO\n");
+    //SDL_Init(SDL_INIT_VIDEO);
+    int ret = SDL_InitSubSystem(SDL_INIT_VIDEO);
+    printf("Set video %d\n", ret);
+    window = SDL_SetVideoMode(1280, 720, 32, SDL_OPENGLES2 | SDL_FULLSCREEN | SDL_HWSURFACE);
+
+    printf("null? %d \n", (window == nullptr));
+
+
+
+    //SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,   SDL_DOUBLEBUF );
+    // Print out some information about the video surface
+    if (window != NULL)
+    {
+        static SDL_SysWMinfo m_sdl_info;
+        printf("The current video surface bits per pixel is %d\n", (int) window->format->BitsPerPixel);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_OPENGLES2 | SDL_DOUBLEBUF);
+        memset(&m_sdl_info, 0, sizeof (SDL_SysWMinfo));
+        SDL_VERSION(&m_sdl_info.version);
+        if (SDL_GetWMInfo(&m_sdl_info) <= 0)
+        {
+            printf("\nError: I require a Window Manager info to create OpenGL/OpenGL-ES contexts.\n\n");
+            return 0;
+        }
+
+        // 		GlEnable (GL_SCISSOR_TEST);
+        // 
+        // 		// Clipping disabled.
+
+
+
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GlViewport(0, 0, 1280, 720);
+
+        SDL_GL_SwapBuffers();
+
+
+        // 		GlScissor (0, 0, 1280,720);
+        // 		
+        // 	    GlDisable (GL_CULL_FACE);
+        // 		GlColorMask  (m_true[0], m_true[1], m_true[2], m_true[3]);
+        // 		GlClearColor (m_zero[0], m_zero[1], m_zero[2], m_zero[3]);
+        // 		glClear 	 (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+
+
+        return true;
+
+    }
+
+
+    return false;
 }
 
 // bool GLViewImpl::initWithFullscreen(const std::string &viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor)
@@ -581,104 +579,112 @@ bool GLViewImpl::initWithFullScreen(const std::string& viewName)
 
 bool GLViewImpl::isOpenGLReady()
 {
-//     return nullptr != _mainWindow;
-	return true;
+    //     return nullptr != _mainWindow;
+    return true;
 }
 
 void GLViewImpl::end()
 {
-//     if(_mainWindow)
-//     {
-//         glfwSetWindowShouldClose(_mainWindow,1);
-//         _mainWindow = nullptr;
-//     }
-//     // Release self. Otherwise, GLViewImpl could not be freed.
-//     release();
+    //     if(_mainWindow)
+    //     {
+    //         glfwSetWindowShouldClose(_mainWindow,1);
+    //         _mainWindow = nullptr;
+    //     }
+    //     // Release self. Otherwise, GLViewImpl could not be freed.
+    //     release();
 }
 
 void GLViewImpl::swapBuffers()
 {
-//     if(_mainWindow)
-//         glfwSwapBuffers(_mainWindow);
-	
-	glClear(GL_COLOR_BUFFER_BIT);
-    
-    
-	
-	SDL_GL_SwapBuffers(  );
+    //     if(_mainWindow)
+    //         glfwSwapBuffers(_mainWindow);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+
+    SDL_GL_SwapBuffers();
 }
 
 bool GLViewImpl::windowShouldClose()
 {
-//     if(_mainWindow)
-//         return glfwWindowShouldClose(_mainWindow) ? true : false;
-//     else
-//         return true;
-	return false;
+    //     if(_mainWindow)
+    //         return glfwWindowShouldClose(_mainWindow) ? true : false;
+    //     else
+    //         return true;
+    return false;
 }
 
 void GLViewImpl::pollEvents()
 {
-	
-	SDL_Event *event;
-	
-	
-	while( SDL_PollEvent( event ) != 0 )
-			{
-// 				//User requests quit
-// 				if( e.type == SDL_QUIT )
-// 				{
-// 					
-// 				}
-// 				//Handle keypress with current mouse position
-// 				else if( e.type == SDL_TEXTINPUT )
-// 				{
-// 					int x = 0, y = 0;
-// 					SDL_GetMouseState( &x, &y );
-// 					printf("Mouse %d %d\n",x,y);
-// 				}
-				switch( event->type ) {
-	    case SDL_ACTIVEEVENT:
-		/* See what happened */
-		printf( "app %s ", event->active.gain ? "gained" : "lost" );
-		if ( event->active.state & SDL_APPACTIVE ) {
-			printf( "active " );
-		} else if ( event->active.state & SDL_APPMOUSEFOCUS ) {
-			printf( "mouse " );
-		} else if ( event->active.state & SDL_APPINPUTFOCUS ) {
-			printf( "input " );
-		}
-		printf( "focus\n" );
-		break;
-		
 
-	    case SDL_KEYDOWN:
-		if ( event->key.keysym.sym == SDLK_ESCAPE ) {
-			
-		}
-		if ( (event->key.keysym.sym == SDLK_g) &&
-		     (event->key.keysym.mod & KMOD_CTRL) ) {
-			
-		}
-		if ( (event->key.keysym.sym == SDLK_z) &&
-		     (event->key.keysym.mod & KMOD_CTRL) ) {
-			
-		}
-		if ( (event->key.keysym.sym == SDLK_RETURN) &&
-		     (event->key.keysym.mod & KMOD_ALT) ) {
-			
-		}
-		printf("key '%s' pressed\n", 
-			SDL_GetKeyName(event->key.keysym.sym));
-		break;
-	    case SDL_QUIT:
-		
-		break;
-	}
-				
-			}
-	
-//     glfwPollEvents();
+    SDL_Event *event;
+
+
+    while (SDL_PollEvent(event) != 0)
+    {
+        // 				//User requests quit
+        // 				if( e.type == SDL_QUIT )
+        // 				{
+        // 					
+        // 				}
+        // 				//Handle keypress with current mouse position
+        // 				else if( e.type == SDL_TEXTINPUT )
+        // 				{
+        // 					int x = 0, y = 0;
+        // 					SDL_GetMouseState( &x, &y );
+        // 					printf("Mouse %d %d\n",x,y);
+        // 				}
+        switch (event->type)
+        {
+            case SDL_ACTIVEEVENT:
+                /* See what happened */
+                printf("app %s ", event->active.gain ? "gained" : "lost");
+                if (event->active.state & SDL_APPACTIVE)
+                {
+                    printf("active ");
+                } else if (event->active.state & SDL_APPMOUSEFOCUS)
+                {
+                    printf("mouse ");
+                } else if (event->active.state & SDL_APPINPUTFOCUS)
+                {
+                    printf("input ");
+                }
+                printf("focus\n");
+                break;
+
+
+            case SDL_KEYDOWN:
+                if (event->key.keysym.sym == SDLK_ESCAPE)
+                {
+
+                }
+                if ((event->key.keysym.sym == SDLK_g) &&
+                        (event->key.keysym.mod & KMOD_CTRL))
+                {
+
+                }
+                if ((event->key.keysym.sym == SDLK_z) &&
+                        (event->key.keysym.mod & KMOD_CTRL))
+                {
+
+                }
+                if ((event->key.keysym.sym == SDLK_RETURN) &&
+                        (event->key.keysym.mod & KMOD_ALT))
+                {
+
+                }
+                printf("key '%s' pressed\n",
+                        SDL_GetKeyName(event->key.keysym.sym));
+                break;
+            case SDL_QUIT:
+
+                break;
+        }
+
+    }
+
+    //     glfwPollEvents();
 }
 
 void GLViewImpl::enableRetina(bool enabled)
@@ -686,22 +692,21 @@ void GLViewImpl::enableRetina(bool enabled)
 
 }
 
-
 void GLViewImpl::setIMEKeyboardState(bool /*bOpen*/)
 {
 
 }
 
-void GLViewImpl::setCursorVisible( bool isVisible )
+void GLViewImpl::setCursorVisible(bool isVisible)
 {
-//     if( _mainWindow == NULL )
-//         return;
-//     
-//     if( isVisible )
-//         glfwSetInputMode(_mainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-//     else
-//         glfwSetInputMode(_mainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	
+    //     if( _mainWindow == NULL )
+    //         return;
+    //     
+    //     if( isVisible )
+    //         glfwSetInputMode(_mainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    //     else
+    //         glfwSetInputMode(_mainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 }
 
 void GLViewImpl::setFrameZoomFactor(float zoomFactor)
@@ -724,39 +729,39 @@ float GLViewImpl::getFrameZoomFactor() const
 
 void GLViewImpl::updateFrameSize()
 {
-//     if (_screenSize.width > 0 && _screenSize.height > 0)
-//     {
-//         int w = 0, h = 0;
-//         glfwGetWindowSize(_mainWindow, &w, &h);
-// 
-//         int frameBufferW = 0, frameBufferH = 0;
-//         glfwGetFramebufferSize(_mainWindow, &frameBufferW, &frameBufferH);
-// 
-//         if (frameBufferW == 2 * w && frameBufferH == 2 * h)
-//         {
-//             if (_isRetinaEnabled)
-//             {
-//                 _retinaFactor = 1;
-//             }
-//             else
-//             {
-//                 _retinaFactor = 2;
-//             }
-//             glfwSetWindowSize(_mainWindow, _screenSize.width/2 * _retinaFactor * _frameZoomFactor, _screenSize.height/2 * _retinaFactor * _frameZoomFactor);
-// 
-//             _isInRetinaMonitor = true;
-//         }
-//         else
-//         {
-//             if (_isInRetinaMonitor)
-//             {
-//                 _retinaFactor = 1;
-//             }
-//             glfwSetWindowSize(_mainWindow, _screenSize.width * _retinaFactor * _frameZoomFactor, _screenSize.height *_retinaFactor * _frameZoomFactor);
-// 
-//             _isInRetinaMonitor = false;
-//         }
-//     }
+    //     if (_screenSize.width > 0 && _screenSize.height > 0)
+    //     {
+    //         int w = 0, h = 0;
+    //         glfwGetWindowSize(_mainWindow, &w, &h);
+    // 
+    //         int frameBufferW = 0, frameBufferH = 0;
+    //         glfwGetFramebufferSize(_mainWindow, &frameBufferW, &frameBufferH);
+    // 
+    //         if (frameBufferW == 2 * w && frameBufferH == 2 * h)
+    //         {
+    //             if (_isRetinaEnabled)
+    //             {
+    //                 _retinaFactor = 1;
+    //             }
+    //             else
+    //             {
+    //                 _retinaFactor = 2;
+    //             }
+    //             glfwSetWindowSize(_mainWindow, _screenSize.width/2 * _retinaFactor * _frameZoomFactor, _screenSize.height/2 * _retinaFactor * _frameZoomFactor);
+    // 
+    //             _isInRetinaMonitor = true;
+    //         }
+    //         else
+    //         {
+    //             if (_isInRetinaMonitor)
+    //             {
+    //                 _retinaFactor = 1;
+    //             }
+    //             glfwSetWindowSize(_mainWindow, _screenSize.width * _retinaFactor * _frameZoomFactor, _screenSize.height *_retinaFactor * _frameZoomFactor);
+    // 
+    //             _isInRetinaMonitor = false;
+    //         }
+    //     }
 }
 
 void GLViewImpl::setFrameSize(float width, float height)
@@ -765,21 +770,21 @@ void GLViewImpl::setFrameSize(float width, float height)
     updateFrameSize();
 }
 
-void GLViewImpl::setViewPortInPoints(float x , float y , float w , float h)
+void GLViewImpl::setViewPortInPoints(float x, float y, float w, float h)
 {
-    experimental::Viewport vp((float)(x * _scaleX * _retinaFactor * _frameZoomFactor + _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor),
-        (float)(y * _scaleY * _retinaFactor  * _frameZoomFactor + _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor),
-        (float)(w * _scaleX * _retinaFactor * _frameZoomFactor),
-        (float)(h * _scaleY * _retinaFactor * _frameZoomFactor));
+    experimental::Viewport vp((float) (x * _scaleX * _retinaFactor * _frameZoomFactor + _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor),
+            (float) (y * _scaleY * _retinaFactor * _frameZoomFactor + _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor),
+            (float) (w * _scaleX * _retinaFactor * _frameZoomFactor),
+            (float) (h * _scaleY * _retinaFactor * _frameZoomFactor));
     Camera::setDefaultViewport(vp);
 }
 
-void GLViewImpl::setScissorInPoints(float x , float y , float w , float h)
+void GLViewImpl::setScissorInPoints(float x, float y, float w, float h)
 {
-    glScissor((GLint)(x * _scaleX * _retinaFactor * _frameZoomFactor + _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor),
-               (GLint)(y * _scaleY * _retinaFactor  * _frameZoomFactor + _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor),
-               (GLsizei)(w * _scaleX * _retinaFactor * _frameZoomFactor),
-               (GLsizei)(h * _scaleY * _retinaFactor * _frameZoomFactor));
+    glScissor((GLint) (x * _scaleX * _retinaFactor * _frameZoomFactor + _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor),
+            (GLint) (y * _scaleY * _retinaFactor * _frameZoomFactor + _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor),
+            (GLsizei) (w * _scaleX * _retinaFactor * _frameZoomFactor),
+            (GLsizei) (h * _scaleY * _retinaFactor * _frameZoomFactor));
 }
 
 Rect GLViewImpl::getScissorRect() const
@@ -787,9 +792,9 @@ Rect GLViewImpl::getScissorRect() const
     GLfloat params[4];
     glGetFloatv(GL_SCISSOR_BOX, params);
     float x = (params[0] - _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor) / (_scaleX * _retinaFactor * _frameZoomFactor);
-    float y = (params[1] - _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor) / (_scaleY * _retinaFactor  * _frameZoomFactor);
+    float y = (params[1] - _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor) / (_scaleY * _retinaFactor * _frameZoomFactor);
     float w = params[2] / (_scaleX * _retinaFactor * _frameZoomFactor);
-    float h = params[3] / (_scaleY * _retinaFactor  * _frameZoomFactor);
+    float h = params[3] / (_scaleY * _retinaFactor * _frameZoomFactor);
     return Rect(x, y, w, h);
 }
 

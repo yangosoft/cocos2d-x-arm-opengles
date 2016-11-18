@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-****************************************************************************/
+ ****************************************************************************/
 
 #ifndef __CC_EGLViewIMPL_DESKTOP_H__
 #define __CC_EGLViewIMPL_DESKTOP_H__
@@ -33,59 +33,59 @@ THE SOFTWARE.
 #define HAVE_IMX6x
 
 
- #include <SDL/SDL.h>
- #include <SDL/SDL_syswm.h>
- #include <SDL/SDL_version.h>
- #include <SDL/SDL_image.h>
- 
- #include <GLES3/gl3.h>
- #ifdef HAVE_OMAP5x
-   #include <EGL/egl.h>
- #else
-   #include <GLES/egl.h>
- #endif
- #include <GLES2/gl2ext.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_syswm.h>
+#include <SDL/SDL_version.h>
+#include <SDL/SDL_image.h>
 
- #define ENABLE_OGLES_CONTEXTS_SUPPORT
+#include <GLES3/gl3.h>
+#ifdef HAVE_OMAP5x
+#include <EGL/egl.h>
+#else
+#include <GLES/egl.h>
+#endif
+#include <GLES2/gl2ext.h>
 
- #ifdef HAVE_OMAP3x
-  //#define ENABLE_YUV_HARDWARE_SUPPORT
-  //#define ENABLE_YUV_NEON_CONVERTER
-  //#define ENABLE_YUV_BCCAT_CONVERTER
-  #define ENABLE_PVR_TC_SUPPORT
- #endif
+#define ENABLE_OGLES_CONTEXTS_SUPPORT
 
- #ifdef HAVE_OMAP5x
-  //#define ENABLE_YUV_HARDWARE_SUPPORT
-  //#define ENABLE_YUV_NEON_CONVERTER
-  //#define ENABLE_YUV_BCCAT_CONVERTER
-  #define ENABLE_PVR_TC_SUPPORT
- #endif
+#ifdef HAVE_OMAP3x
+//#define ENABLE_YUV_HARDWARE_SUPPORT
+//#define ENABLE_YUV_NEON_CONVERTER
+//#define ENABLE_YUV_BCCAT_CONVERTER
+#define ENABLE_PVR_TC_SUPPORT
+#endif
 
- #ifdef HAVE_AM35x
-  #define ENABLE_YUV_HARDWARE_SUPPORT
-  //#define ENABLE_YUV_NEON_CONVERTER
-  //#define ENABLE_YUV_BCCAT_CONVERTER
-  #define ENABLE_YUV_GPUVSINK_CONVERTER
-  #define ENABLE_PVR_TC_SUPPORT
- #endif
+#ifdef HAVE_OMAP5x
+//#define ENABLE_YUV_HARDWARE_SUPPORT
+//#define ENABLE_YUV_NEON_CONVERTER
+//#define ENABLE_YUV_BCCAT_CONVERTER
+#define ENABLE_PVR_TC_SUPPORT
+#endif
 
- #ifdef HAVE_DM814x
-  //#define ENABLE_YUV_HARDWARE_SUPPORT
-  //#define ENABLE_YUV_NEON_CONVERTER
-  //#define ENABLE_YUV_BCCAT_CONVERTER
-  #define ENABLE_PVR_TC_SUPPORT
- #endif
+#ifdef HAVE_AM35x
+#define ENABLE_YUV_HARDWARE_SUPPORT
+//#define ENABLE_YUV_NEON_CONVERTER
+//#define ENABLE_YUV_BCCAT_CONVERTER
+#define ENABLE_YUV_GPUVSINK_CONVERTER
+#define ENABLE_PVR_TC_SUPPORT
+#endif
 
- #ifdef HAVE_IMX5x
-  #define ENABLE_DDS_TC_SUPPORT
- #endif
+#ifdef HAVE_DM814x
+//#define ENABLE_YUV_HARDWARE_SUPPORT
+//#define ENABLE_YUV_NEON_CONVERTER
+//#define ENABLE_YUV_BCCAT_CONVERTER
+#define ENABLE_PVR_TC_SUPPORT
+#endif
 
- #ifdef HAVE_IMX6x
-  //#define ENABLE_KTX_TC_SUPPORT with GLES2 is not supported?
-  // The video playing in texture.
-  #define ENABLE_TEXDIRECTVIVMAP_SUPPORT
- #endif
+#ifdef HAVE_IMX5x
+#define ENABLE_DDS_TC_SUPPORT
+#endif
+
+#ifdef HAVE_IMX6x
+//#define ENABLE_KTX_TC_SUPPORT with GLES2 is not supported?
+// The video playing in texture.
+#define ENABLE_TEXDIRECTVIVMAP_SUPPORT
+#endif
 
 
 
@@ -117,7 +117,7 @@ public:
     static GLViewImpl* create(const std::string& viewName);
     static GLViewImpl* createWithRect(const std::string& viewName, Rect size, float frameZoomFactor = 1.0f);
     static GLViewImpl* createWithFullScreen(const std::string& viewName);
-//     static GLViewImpl* createWithFullScreen(const std::string& viewName, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
+    //     static GLViewImpl* createWithFullScreen(const std::string& viewName, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
 
     /*
      *frameZoomFactor for frame. This method is for debugging big resolution (e.g.new ipad) app on desktop.
@@ -128,13 +128,13 @@ public:
     float getFrameZoomFactor() const override;
     //void centerWindow();
 
-    virtual void setViewPortInPoints(float x , float y , float w , float h) override;
-    virtual void setScissorInPoints(float x , float y , float w , float h) override;
+    virtual void setViewPortInPoints(float x, float y, float w, float h) override;
+    virtual void setScissorInPoints(float x, float y, float w, float h) override;
     virtual Rect getScissorRect() const override;
 
     bool windowShouldClose() override;
     void pollEvents() override;
-//     GLFWwindow* getWindow() const { return _mainWindow; }
+    //     GLFWwindow* getWindow() const { return _mainWindow; }
 
     /* override functions */
     virtual bool isOpenGLReady() override;
@@ -155,18 +155,33 @@ public:
      *  @note This method is only available on Mac.
      */
     void enableRetina(bool enabled);
+
     /** Check whether retina display is enabled. */
-    bool isRetinaEnabled() const { return _isRetinaEnabled; };
-    
+    bool isRetinaEnabled() const
+    {
+        return _isRetinaEnabled;
+    };
+
     /** Get retina factor */
-    int getRetinaFactor() const override { return _retinaFactor; }
-    
+    int getRetinaFactor() const override
+    {
+        return _retinaFactor;
+    }
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-    HWND getWin32Window() { return glfwGetWin32Window(_mainWindow); }
+
+    HWND getWin32Window()
+    {
+        return glfwGetWin32Window(_mainWindow);
+    }
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
-    
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-    id getCocoaWindow() override { return glfwGetCocoaWindow(_mainWindow); }
+
+    id getCocoaWindow() override
+    {
+        return glfwGetCocoaWindow(_mainWindow);
+    }
 #endif // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
 protected:
@@ -175,34 +190,34 @@ protected:
 
     bool initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor);
     bool initWithFullScreen(const std::string& viewName);
-//     bool initWithFullscreen(const std::string& viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
+    //     bool initWithFullscreen(const std::string& viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
 
-//     bool initGlew();
+    //     bool initGlew();
 
     void updateFrameSize();
 
     // GLFW callbacks
-//     void onGLFWError(int errorID, const char* errorDesc);
-//     void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify);
-//     void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y);
-//     void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y);
-//     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-//     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
-//     void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y);
-//     void onGLFWframebuffersize(GLFWwindow* window, int w, int h);
-//     void onGLFWWindowSizeFunCallback(GLFWwindow *window, int width, int height);
-//     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
+    //     void onGLFWError(int errorID, const char* errorDesc);
+    //     void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify);
+    //     void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y);
+    //     void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y);
+    //     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    //     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
+    //     void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y);
+    //     void onGLFWframebuffersize(GLFWwindow* window, int w, int h);
+    //     void onGLFWWindowSizeFunCallback(GLFWwindow *window, int width, int height);
+    //     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
 
     bool _captured;
     bool _supportTouch;
     bool _isInRetinaMonitor;
     bool _isRetinaEnabled;
-    int  _retinaFactor;  // Should be 1 or 2
+    int _retinaFactor; // Should be 1 or 2
 
     float _frameZoomFactor;
 
-//     GLFWwindow* _mainWindow;
-//     GLFWmonitor* _monitor;
+    //     GLFWwindow* _mainWindow;
+    //     GLFWmonitor* _monitor;
 
     std::string _glfwError;
 
@@ -210,16 +225,16 @@ protected:
     float _mouseY;
 
     friend class GLFWEventHandler;
-	
-	SDL_Surface *window;
-	
 
-// 	SDL_GLContext context;
+    SDL_Surface *window;
+
+
+    // 	SDL_GLContext context;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
 };
 
-NS_CC_END   // end of namespace   cocos2d
+NS_CC_END // end of namespace   cocos2d
 
 #endif  // end of __CC_EGLViewImpl_DESKTOP_H__
