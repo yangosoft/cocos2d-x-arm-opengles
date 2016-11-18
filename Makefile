@@ -11,7 +11,7 @@ DEFINES=-DPLATFORM="iMX6x" -DEGL_API_FB -DLINUX -DUSE_SOC_MX6 -DLINUX  -DEGL_API
 CFLAGS=-I./ -I${SDK_ROOT}/usr/include -I./external -I${SDK_ROOT}/usr/local/include/GLFW/ -I${SDK_ROOT}/usr/include/freetype2/ 
 
 
-LIBS=-L/home/devel/sdk-dani/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lSDL_image -lSDL -L/home/devel/sdk-dani/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lm `pkg-config --libs --cflags libpng`  -lz -ljpeg -lpng -lfreetype -lfontconfig -lgstreamer-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lxml2 -lglib-2.0 -lgstapp-1.0   -L/home/devel/sdk-dani/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lEGL -lGAL -lCLC -lGLSLC -lVDK -lGLESv2 -lsqlite3 -lcurl
+LIBS=-L/home/devel/sdk-imx6/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lSDL_image -lSDL -L/home/devel/sdk-imx6/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lm `pkg-config --libs --cflags libpng`  -lz -ljpeg -lpng -lfreetype -lfontconfig -lgstreamer-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lxml2 -lglib-2.0 -lgstapp-1.0   -L/home/devel/sdk-imx6/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lEGL -lGAL -lCLC -lGLSLC -lVDK -lGLESv2 -lsqlite3 -lcurl
 
 #SOURCES NOT NEEDED
 # ./editor-support/cocostudio/CCDecorativeDisplay.cpp \
@@ -624,16 +624,9 @@ SOURCES_C=./external/ConvertUTF/ConvertUTF.c\
 ./base/ccFPSImages.c
 
 
-
-
-
-
-
-
 OBJECTS= $(SOURCES:.cpp=.o) 
 OBJECST2= $(patsubst %.cc,%.o,$(SOURCES_CC)) 
 
-#OBJECTS2 = $(patsubst %.cpp,%.o,$(SOURCES:.c=.o)) $(patsubst %.cc,%.o,$(SOURCES:.c=.o))
 
 OBJECTS_C = $(patsubst %.c,%.o,$(SOURCES_C:.c=.o))
 
@@ -647,7 +640,7 @@ OBJECTS_C = $(patsubst %.c,%.o,$(SOURCES_C:.c=.o))
 # 	
 %.o: %.cc
 	@echo " "
-	@echo "****** Compiling $<"
+	@echo "[CC] Compiling $<"
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(DEFINES) -c $< -o $@ 
 	
 %.o: %.c
@@ -660,6 +653,6 @@ all: $(OBJECTS) $(OBJECTS_C)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(DEFINES) $^  $(LIBS)    -o $(TARGET)
 	
 clean:
-	find -name "*.o" -exec rm {} \; || true
-	find -name "*.a" -exec rm {} \; || true
-	rm $(TARGET) || true
+	find -name "*.o" -exec rm {} \; 
+	find -name "*.a" -exec rm {} \; 
+	rm $(TARGET) 
