@@ -3,6 +3,21 @@
 
 #include "cocos2d.h"
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_syswm.h>
+#include <SDL/SDL_version.h>
+#include <SDL/SDL_image.h>
+
+#include <GLES3/gl3.h>
+#include <GLES/egl.h>
+#include <GLES2/gl2ext.h>
+
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <ctime>
+
 class HelloWorld : public cocos2d::Layer
 {
 public:

@@ -177,6 +177,9 @@ public:
         return _retinaFactor;
     }
 
+    Rect getVisibleRect() const override { cocos2d::Rect r(0,0,1280,720); return r; }
+    Size getVisibleSize() const override { Size s(1280,720); return s; } ;
+    
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
     HWND getWin32Window()
