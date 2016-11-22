@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 
+#include <iostream>
+
 NS_CC_BEGIN
 
 enum {
@@ -245,6 +247,9 @@ void GLProgramCache::loadDefaultGLPrograms()
     loadDefaultGLProgram(p, kShaderType_3DPositionNormalTex);
     _programs.insert( std::make_pair(GLProgram::SHADER_3D_POSITION_NORMAL_TEXTURE, p) );
 
+    
+    
+    std::cout << __PRETTY_FUNCTION__ << " no cargo kShaderType_3DSkinPositionNormalTex! " << std::endl;
     p = new GLProgram();
     loadDefaultGLProgram(p, kShaderType_3DSkinPositionNormalTex);
     _programs.insert(std::make_pair(GLProgram::SHADER_3D_SKINPOSITION_NORMAL_TEXTURE, p));
@@ -253,6 +258,8 @@ void GLProgramCache::loadDefaultGLPrograms()
     loadDefaultGLProgram(p, kShaderType_3DPositionBumpedNormalTex);
     _programs.insert(std::make_pair(GLProgram::SHADER_3D_POSITION_BUMPEDNORMAL_TEXTURE, p));
 
+    
+    std::cout << __PRETTY_FUNCTION__ << " no cargo kShaderType_3DSkinPositionBumpedNormalTex! " << std::endl;
     p = new GLProgram();
     loadDefaultGLProgram(p, kShaderType_3DSkinPositionBumpedNormalTex);
     _programs.insert(std::make_pair(GLProgram::SHADER_3D_SKINPOSITION_BUMPEDNORMAL_TEXTURE, p));
@@ -448,6 +455,9 @@ void GLProgramCache::reloadDefaultGLProgramsRelativeToLights()
 
 void GLProgramCache::loadDefaultGLProgram(GLProgram *p, int type)
 {
+    
+    std::cout << __FUNCTION__ << " type: " << type  << " " << std::endl;
+    
     switch (type) {
         case kShaderType_PositionTextureColor:
             p->initWithByteArrays(ccPositionTextureColor_vert, ccPositionTextureColor_frag);
@@ -509,6 +519,8 @@ void GLProgramCache::loadDefaultGLProgram(GLProgram *p, int type)
             p->initWithByteArrays(cc3D_PositionTex_vert, cc3D_ColorTex_frag);
             break;
         case kShaderType_3DSkinPositionTex:
+            std::cout << "MODIFICADO: kShaderType_3DSkinPositionTex" << std::endl;
+            //19
             p->initWithByteArrays(cc3D_SkinPositionTex_vert, cc3D_ColorTex_frag);
             break;
         case kShaderType_3DPositionNormal:
@@ -525,6 +537,8 @@ void GLProgramCache::loadDefaultGLProgram(GLProgram *p, int type)
             break;
         case kShaderType_3DSkinPositionNormalTex:
             {
+                std::cout << "MODIFICADO: kShaderType_3DSkinPositionNormalTex" << std::endl;
+                //22
                 std::string def = getShaderMacrosForLight();
                 p->initWithByteArrays((def + std::string(cc3D_SkinPositionNormalTex_vert)).c_str(), (def + std::string(cc3D_ColorNormalTex_frag)).c_str());
             }
@@ -538,6 +552,9 @@ void GLProgramCache::loadDefaultGLProgram(GLProgram *p, int type)
             break;
         case kShaderType_3DSkinPositionBumpedNormalTex:
             {
+                std::cout << "MODIFICADO: kShaderType_3DSkinPositionBumpedNormalTex" << std::endl;
+             
+                //24
                 std::string def = getShaderMacrosForLight();
                 std::string normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
                 p->initWithByteArrays((def + normalMapDef + std::string(cc3D_SkinPositionNormalTex_vert)).c_str(), (def + normalMapDef + std::string(cc3D_ColorNormalTex_frag)).c_str());

@@ -24,7 +24,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-****************************************************************************/
+ ****************************************************************************/
+
+#include <iostream>
 
 #include "renderer/CCGLProgram.h"
 
@@ -164,11 +166,13 @@ GLProgram* GLProgram::createWithByteArrays(const GLchar* vShaderByteArray, const
 
 GLProgram* GLProgram::createWithFilenames(const std::string& vShaderFilename, const std::string& fShaderFilename)
 {
+    std::cout << "loading shader: " << vShaderFilename << "\n" << fShaderFilename << std::endl;
     return createWithFilenames(vShaderFilename, fShaderFilename, EMPTY_DEFINE);
 }
 
 GLProgram* GLProgram::createWithFilenames(const std::string& vShaderFilename, const std::string& fShaderFilename, const std::string& compileTimeDefines)
 {
+    std::cout << "loading shader: " << vShaderFilename << "\n" << fShaderFilename << std::endl;
     auto ret = new (std::nothrow) GLProgram();
     if(ret && ret->initWithFilenames(vShaderFilename, fShaderFilename, compileTimeDefines)) {
         ret->link();
@@ -231,6 +235,7 @@ bool GLProgram::initWithByteArrays(const GLchar* vShaderByteArray, const GLchar*
     {
         if (!compileShader(&_vertShader, GL_VERTEX_SHADER, vShaderByteArray, replacedDefines))
         {
+            CHECK_GL_ERROR_DEBUG();
             CCLOG("cocos2d: ERROR: Failed to compile vertex shader");
             return false;
        }
@@ -241,6 +246,7 @@ bool GLProgram::initWithByteArrays(const GLchar* vShaderByteArray, const GLchar*
     {
         if (!compileShader(&_fragShader, GL_FRAGMENT_SHADER, fShaderByteArray, replacedDefines))
         {
+            CHECK_GL_ERROR_DEBUG();
             CCLOG("cocos2d: ERROR: Failed to compile fragment shader");
             return false;
         }
@@ -303,6 +309,7 @@ void GLProgram::bindPredefinedVertexAttribs()
 
 void GLProgram::parseVertexAttribs()
 {
+    std::cout << __FUNCTION__ << std::endl;
     //_vertexAttribs.clear();
 
     // Query and store vertex attribute meta-data from the program.
@@ -330,17 +337,22 @@ void GLProgram::parseVertexAttribs()
                 _vertexAttribs[attribute.name] = attribute;
             }
         }
-    }
-    else
+    } else
     {
         GLchar ErrorLog[1024];
-        glGetProgramInfoLog(_program, sizeof(ErrorLog), NULL, ErrorLog);
-        CCLOG("Error linking shader program: '%s'\n", ErrorLog);
+        glGetProgramInfoLog(_program, sizeof (ErrorLog), NULL, ErrorLog);
+        CCLOG("Error linking shader program %d: '%s'\n",_program ,ErrorLog);
+        
+        glGetShaderInfoLog(_program, sizeof (ErrorLog), NULL, ErrorLog);
+        CCLOG("More info: '%s'\n", ErrorLog);
+                
+        CHECK_GL_ERROR_DEBUG();
     }
 }
 
 void GLProgram::parseUniforms()
 {
+    std::cout << __FUNCTION__ << std::endl;
     //_userUniforms.clear();
 
     // Query and store uniforms from the program.
@@ -396,6 +408,7 @@ void GLProgram::parseUniforms()
     }
     else
     {
+        std::cout << "activeUniforms?" << activeUniforms << std::endl;
         GLchar ErrorLog[1024];
         glGetProgramInfoLog(_program, sizeof(ErrorLog), NULL, ErrorLog);
         CCLOG("Error linking shader program: '%s'\n", ErrorLog);
@@ -439,18 +452,27 @@ bool GLProgram::compileShader(GLuint* shader, GLenum type, const GLchar* source,
 
     if (!source)
     {
+        std::cout << "NO SOURCE?" << std::endl;
         return false;
     }
 
-    const GLchar *sources[] = {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WINRT
-        (type == GL_VERTEX_SHADER ? "precision mediump float;\n precision mediump int;\n" : "precision mediump float;\n precision mediump int;\n"),
-#elif (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32 && CC_TARGET_PLATFORM != CC_PLATFORM_LINUX && CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
+//    const GLchar * sources[] = {
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_WINRT
+//        (type == GL_VERTEX_SHADER ? "precision mediump float;\n precision mediump int;\n" : "precision mediump float;\n precision mediump int;\n"),
+//#elif (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32 && CC_TARGET_PLATFORM != CC_PLATFORM_LINUX && CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
+//        (type == GL_VERTEX_SHADER ? "precision highp float;\n precision highp int;\n" : "precision mediump float;\n precision mediump int;\n"),
+//#endif
+//        COCOS2D_SHADER_UNIFORMS,
+//        convertedDefines.c_str(),
+//        source
+//    };
+    
+       const GLchar * sources[] = {
         (type == GL_VERTEX_SHADER ? "precision highp float;\n precision highp int;\n" : "precision mediump float;\n precision mediump int;\n"),
-#endif
         COCOS2D_SHADER_UNIFORMS,
         convertedDefines.c_str(),
-        source};
+        source
+    };
 
     *shader = glCreateShader(type);
     glShaderSource(*shader, sizeof(sources)/sizeof(*sources), sources, nullptr);
@@ -477,8 +499,9 @@ bool GLProgram::compileShader(GLuint* shader, GLenum type, const GLchar* source,
         }
         free(src);
 
-        return false;;
+        return false;
     }
+    std::cout << "OK!" << std::endl;
     return (status == GL_TRUE);
 }
 
@@ -542,6 +565,7 @@ void GLProgram::updateUniforms()
 
 bool GLProgram::link()
 {
+    std::cout << __FUNCTION__ << std::endl;
     CCASSERT(_program != 0, "Cannot link invalid program");
 
     GLint status = GL_TRUE;

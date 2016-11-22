@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- ****************************************************************************/
+****************************************************************************/
 
 #ifndef __CCGL_H__
 #define __CCGL_H__
@@ -33,61 +33,65 @@ THE SOFTWARE.
 #define HAVE_IMX6x
 
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
-#include <SDL/SDL_version.h>
-#include <SDL/SDL_image.h>
-#include <GLES3/gl3.h>
-#ifdef HAVE_OMAP5x
-#include <EGL/egl.h>
-#else
-#include <GLES/egl.h>
-#endif
-#include <GLES2/gl2ext.h>
+ #include <SDL/SDL.h>
+ #include <SDL/SDL_syswm.h>
+ #include <SDL/SDL_version.h>
+ #include <SDL/SDL_image.h>
+ #include <GLES3/gl3.h>
 
-#define ENABLE_OGLES_CONTEXTS_SUPPORT
 
-#ifdef HAVE_OMAP3x
-//#define ENABLE_YUV_HARDWARE_SUPPORT
-//#define ENABLE_YUV_NEON_CONVERTER
-//#define ENABLE_YUV_BCCAT_CONVERTER
-#define ENABLE_PVR_TC_SUPPORT
-#endif
-
-#ifdef HAVE_OMAP5x
-//#define ENABLE_YUV_HARDWARE_SUPPORT
-//#define ENABLE_YUV_NEON_CONVERTER
-//#define ENABLE_YUV_BCCAT_CONVERTER
-#define ENABLE_PVR_TC_SUPPORT
-#endif
-
-#ifdef HAVE_AM35x
-#define ENABLE_YUV_HARDWARE_SUPPORT
-//#define ENABLE_YUV_NEON_CONVERTER
-//#define ENABLE_YUV_BCCAT_CONVERTER
-#define ENABLE_YUV_GPUVSINK_CONVERTER
-#define ENABLE_PVR_TC_SUPPORT
-#endif
-
-#ifdef HAVE_DM814x
-//#define ENABLE_YUV_HARDWARE_SUPPORT
-//#define ENABLE_YUV_NEON_CONVERTER
-//#define ENABLE_YUV_BCCAT_CONVERTER
-#define ENABLE_PVR_TC_SUPPORT
-#endif
-
-#ifdef HAVE_IMX5x
-#define ENABLE_DDS_TC_SUPPORT
-#endif
-
-#ifdef HAVE_IMX6x
-//#define ENABLE_KTX_TC_SUPPORT with GLES2 is not supported?
-// The video playing in texture.
-#define ENABLE_TEXDIRECTVIVMAP_SUPPORT
-#endif
+ #ifdef HAVE_OMAP5x
+   #include <EGL/egl.h>
+ #else
+   #include <GLES/egl.h>
+ #endif
+ #include <GLES2/gl2ext.h>
 
 
 
+ #define ENABLE_OGLES_CONTEXTS_SUPPORT
+
+ #ifdef HAVE_OMAP3x
+  //#define ENABLE_YUV_HARDWARE_SUPPORT
+  //#define ENABLE_YUV_NEON_CONVERTER
+  //#define ENABLE_YUV_BCCAT_CONVERTER
+  #define ENABLE_PVR_TC_SUPPORT
+ #endif
+
+ #ifdef HAVE_OMAP5x
+  //#define ENABLE_YUV_HARDWARE_SUPPORT
+  //#define ENABLE_YUV_NEON_CONVERTER
+  //#define ENABLE_YUV_BCCAT_CONVERTER
+  #define ENABLE_PVR_TC_SUPPORT
+ #endif
+
+ #ifdef HAVE_AM35x
+  #define ENABLE_YUV_HARDWARE_SUPPORT
+  //#define ENABLE_YUV_NEON_CONVERTER
+  //#define ENABLE_YUV_BCCAT_CONVERTER
+  #define ENABLE_YUV_GPUVSINK_CONVERTER
+  #define ENABLE_PVR_TC_SUPPORT
+ #endif
+
+ #ifdef HAVE_DM814x
+  //#define ENABLE_YUV_HARDWARE_SUPPORT
+  //#define ENABLE_YUV_NEON_CONVERTER
+  //#define ENABLE_YUV_BCCAT_CONVERTER
+  #define ENABLE_PVR_TC_SUPPORT
+ #endif
+
+ #ifdef HAVE_IMX5x
+  #define ENABLE_DDS_TC_SUPPORT
+ #endif
+
+ #ifdef HAVE_IMX6x
+  //#define ENABLE_KTX_TC_SUPPORT with GLES2 is not supported?
+  // The video playing in texture.
+  #define ENABLE_TEXDIRECTVIVMAP_SUPPORT
+ #endif
+
+
+ 
 ///ANDROID
 #define glClearDepth                glClearDepthf
 //#define glDeleteVertexArrays        glDeleteVertexArraysOES
@@ -117,15 +121,15 @@ typedef char GLchar;
 #endif
 
 //declare here while define in EGLView_android.cpp
-extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT;
+/*extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT;
 extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT;
 extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
 
 #define glGenVertexArraysOES glGenVertexArraysOESEXT
 #define glBindVertexArrayOES glBindVertexArrayOESEXT
-#define glDeleteVertexArraysOES glDeleteVertexArraysOESEXT
+#define glDeleteVertexArraysOES glDeleteVertexArraysOESEXT*/
 //<ANDROID
-
+ 
 #ifndef  CC_GL_DEPTH24_STENCIL8
 #define CC_GL_DEPTH24_STENCIL8      GL_DEPTH24_STENCIL8
 #endif

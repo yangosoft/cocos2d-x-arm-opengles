@@ -491,10 +491,161 @@ void GlDisable(GLenum _uiFlag)
 
 }
 
+int GLViewImpl::initSDL()
+{
+    int ret = SDL_InitSubSystem(SDL_INIT_VIDEO);
+
+    const SDL_VideoInfo *vInfo = SDL_GetVideoInfo();
+    std::cout << vInfo->hw_available << " " << vInfo->wm_available << " " << vInfo->video_mem << std::endl;
+    static SDL_SysWMinfo m_sdl_info;
+
+    //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_OPENGLES2);
+    memset(&m_sdl_info, 0, sizeof (SDL_SysWMinfo));
+
+
+
+    SDL_VERSION(&m_sdl_info.version);
+    if (SDL_GetWMInfo(&m_sdl_info) <= 0)
+    {
+        printf("\nError: I require a Window Manager info to create OpenGL/OpenGL-ES contexts.\n\n");
+        return 0;
+    }
+
+
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
+
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
+    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_DOUBLEBUF);
+
+
+    unsigned int m_videoflags = 0;
+
+    m_videoflags = SDL_OPENGLES2;
+
+
+    m_videoflags |= SDL_DOUBLEBUF;
+
+    m_videoflags |= SDL_FULLSCREEN;
+
+
+    if (vInfo->hw_available)
+        m_videoflags |= SDL_HWSURFACE;
+    else
+        m_videoflags |= SDL_SWSURFACE;
+
+    // Blitting is fast copying / moving /swapping of contiguous sections of memory.
+    if (vInfo->blit_hw)
+        m_videoflags |= SDL_HWACCEL;
+
+    SDL_Surface* window = SDL_SetVideoMode(1280, 720, 32, m_videoflags);
+
+    if (window == NULL)
+    {
+        return -1;
+    }
+    printf("The current video surface bits per pixel is %d %dx%d\n", (int) window->format->BitsPerPixel, window->w, window->h);
+
+    unsigned char data[8] = {0};
+
+    SDL_Cursor *m_old_cursor = SDL_GetCursor();
+    SDL_Cursor *m_cursor = SDL_CreateCursor(data, data, 8, 8, 4, 4);
+
+    SDL_SetCursor(m_cursor);
+    SDL_ShowCursor(SDL_ENABLE);
+    glClearColor((108.0f / 255.0f), 1.0f, 1.0f, 1.0f); //Cyan color
+
+    eglSwapInterval(m_sdl_info.egl_display, 0);
+
+
+
+    glViewport(0, 0, 1280, 720);
+    //glScissor(0, 0, 1280, 720);
+    //glEnable(GL_SCISSOR_TEST);
+    GLenum gl_error = glGetError();
+
+    if (gl_error != GL_NO_ERROR)
+    {
+        printf("OpenGL error[%d] - ", gl_error);
+    }
+
+
+
+
+
+
+
+
+
+    static const EGLint context_attribs[] = {
+        EGL_CONTEXT_CLIENT_VERSION, 2,
+        EGL_NONE
+    };
+
+
+    void* context = eglGetCurrentContext();
+    std::cout << "context " << context << std::endl;
+    std::cout << "egl_display " << m_sdl_info.egl_display << std::endl;
+    std::cout << "egl_surface " << m_sdl_info.egl_surface << std::endl;
+
+
+    void *ctx = eglCreateContext(m_sdl_info.egl_display, m_sdl_info.egl_config, context, context_attribs);
+
+    /*void *nContext  = eglCreateContext( m_sdl_info.egl_display, m_sdl_info.egl_config,NULL, context_attribs );*/
+    // Create new context sharing with given one.
+
+
+    std::cout << "nContext: " << ctx << std::endl;
+    if (ctx == NULL)
+    {
+        ret = eglMakeCurrent(m_sdl_info.egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, context);
+
+    }
+    return 1;
+
+}
+
 bool GLViewImpl::initWithFullScreen(const std::string& viewName)
 {
 
     printf("%s\n", __FUNCTION__);
+
+    initSDL();
+GlViewport(0, 0, 1280, 720);
+//    while (1)
+//    {
+//
+//
+//
+//        glClearColor((128.0f / 255.0f), 1.0f, 1.0f, 1.0f);
+//        glClear(GL_COLOR_BUFFER_BIT);
+//        SDL_GL_SwapBuffers();
+//        int gl_error = glGetError();
+//
+//        if (gl_error != GL_NO_ERROR)
+//        {
+//            printf("OpenGL error[%d] - ", gl_error);
+//        }
+//
+//        SDL_Delay(1000);
+//
+//
+//    }
+
+    return true;
     //Create fullscreen window on primary monitor at its current video mode.
     //     _monitor = glfwGetPrimaryMonitor();
     //     if (nullptr == _monitor)
@@ -505,9 +656,11 @@ bool GLViewImpl::initWithFullScreen(const std::string& viewName)
 
     printf("INIT VIDEO\n");
     //SDL_Init(SDL_INIT_VIDEO);
-    int ret = SDL_InitSubSystem(SDL_INIT_VIDEO);
+    int ret = SDL_Init(SDL_INIT_EVERYTHING);
+    //int ret = SDL_InitSubSystem(SDL_INIT_VIDEO);
     printf("Set video %d\n", ret);
-    window = SDL_SetVideoMode(1280, 720, 32, SDL_OPENGLES2 | SDL_FULLSCREEN | SDL_HWSURFACE);
+    /// window = SDL_SetVideoMode(1280, 720, 32, SDL_OPENGLES2 | SDL_FULLSCREEN | SDL_HWSURFACE);
+    window = SDL_SetVideoMode(1280, 720, 32, SDL_OPENGLES2 | SDL_HWSURFACE | SDL_DOUBLEBUF);
 
     printf("null? %d \n", (window == nullptr));
 
@@ -515,12 +668,15 @@ bool GLViewImpl::initWithFullScreen(const std::string& viewName)
 
     //SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,   SDL_DOUBLEBUF );
     // Print out some information about the video surface
-    if (window != NULL)
+    if (window != nullptr)
     {
         static SDL_SysWMinfo m_sdl_info;
-        printf("The current video surface bits per pixel is %d\n", (int) window->format->BitsPerPixel);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_OPENGLES2 | SDL_DOUBLEBUF);
+        printf("The current video surface bits per pixel is %d %dx%d\n", (int) window->format->BitsPerPixel, window->w, window->h);
+        //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_OPENGLES2);
         memset(&m_sdl_info, 0, sizeof (SDL_SysWMinfo));
+
+
+
         SDL_VERSION(&m_sdl_info.version);
         if (SDL_GetWMInfo(&m_sdl_info) <= 0)
         {
@@ -532,15 +688,21 @@ bool GLViewImpl::initWithFullScreen(const std::string& viewName)
         // 
         // 		// Clipping disabled.
 
+        static const EGLint context_attribs[] = {
+            EGL_CONTEXT_CLIENT_VERSION, 2,
+            EGL_NONE
+        };
 
 
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        GlViewport(0, 0, 1280, 720);
+        // Create new context sharing with given one.
 
-        SDL_GL_SwapBuffers();
+        context = eglGetCurrentContext();
+        std::cout << "Context: " << context << std::endl;
+        std::cout << "Context SDL: " << m_sdl_info.egl_context << std::endl;
 
+        void *nContext = eglCreateContext(m_sdl_info.egl_display, m_sdl_info.egl_config, NULL, context_attribs);
+        std::cout << "nContext: " << nContext << std::endl;
+        /*
 
         // 		GlScissor (0, 0, 1280,720);
         // 		
@@ -549,9 +711,55 @@ bool GLViewImpl::initWithFullScreen(const std::string& viewName)
         // 		GlClearColor (m_zero[0], m_zero[1], m_zero[2], m_zero[3]);
         // 		glClear 	 (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        //        int ret = eglMakeCurrent( m_sdl_info.egl_display, EGL_NO_SURFACE,	EGL_NO_SURFACE, context );
+        //        //        
+        //        //        
+        //        std::cout << "ret eglMakecurrent? " << ret << std::endl;
+
+
+                // 		GlEnable (GL_SCISSOR_TEST);
+                // 
+                // 		// Clipping disabled.
 
 
 
+                //glEnable(GL_CULL_FACE);
+                glDepthMask(GL_TRUE);
+
+                //glEnable(GL_DEPTH_TEST);
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                GlViewport(0, 0, 1280, 720);
+                GlScissor(0, 0, 1280, 720);
+                glEnable(GL_SCISSOR_TEST);
+
+                //SDL_GL_SwapBuffers();
+                SDL_Rect r;
+                r.h = 720;
+                r.w = 1280;
+                r.x = 0;
+                r.y = 0;
+
+
+                //while (1)
+                {
+                    SDL_FillRect(window, &r, SDL_MapRGB(window->format, 200, 200, 0));
+
+                    SDL_Flip(window);
+                    SDL_GL_SwapBuffers();
+
+                    //SDL_Delay( 2000 );
+                }
+
+                // 		GlScissor (0, 0, 1280,720);
+                // 		
+                // 	    GlDisable (GL_CULL_FACE);
+                // 		GlColorMask  (m_true[0], m_true[1], m_true[2], m_true[3]);
+                // 		GlClearColor (m_zero[0], m_zero[1], m_zero[2], m_zero[3]);
+                // 		glClear 	 (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+
+         */
         return true;
 
     }
@@ -599,10 +807,10 @@ void GLViewImpl::swapBuffers()
     //     if(_mainWindow)
     //         glfwSwapBuffers(_mainWindow);
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
 
 
-
+    //glClear ( GL_COLOR_BUFFER_BIT );
     SDL_GL_SwapBuffers();
 }
 

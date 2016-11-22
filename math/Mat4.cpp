@@ -25,9 +25,14 @@
 
 NS_CC_MATH_BEGIN
 
+#ifdef __SSE__
+#undef __SSE__
+#endif
+
 Mat4::Mat4()
 {
-    *this = IDENTITY;
+    set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    
 }
 
 Mat4::Mat4(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,

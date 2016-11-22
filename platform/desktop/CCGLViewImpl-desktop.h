@@ -39,12 +39,21 @@ THE SOFTWARE.
 #include <SDL/SDL_image.h>
 
 #include <GLES3/gl3.h>
-#ifdef HAVE_OMAP5x
-#include <EGL/egl.h>
-#else
+
 #include <GLES/egl.h>
-#endif
+
 #include <GLES2/gl2ext.h>
+
+//#include <GLES3/gl3.h>
+//#ifdef HAVE_OMAP5x
+//#include <EGL/egl.h>
+//#else
+//#include <GLES/egl.h>
+//#endif
+//#include <GLES2/gl2ext.h>
+//
+//#include <EGL/egl.h>
+//#include <GLES/egl.h>
 
 #define ENABLE_OGLES_CONTEXTS_SUPPORT
 
@@ -227,8 +236,9 @@ protected:
     friend class GLFWEventHandler;
 
     SDL_Surface *window;
+    EGLContext context;
 
-
+    int initSDL();
     // 	SDL_GLContext context;
 
 private:

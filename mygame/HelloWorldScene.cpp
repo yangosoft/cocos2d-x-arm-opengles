@@ -380,7 +380,7 @@ void HelloWorld::update(float delta)
         for (auto i = steps - 1; i != 0; i--)
         {
             float scale = (-1.76f * (i + mCurrentStep) + 56.4f) / steps;
-            circles[i]->setScale(scale);
+            if (circles[i] != nullptr) circles[i]->setScale(scale);
 
         }
 
