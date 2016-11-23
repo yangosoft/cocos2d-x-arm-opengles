@@ -9,9 +9,19 @@ This is a port of Cocos2d-x 3.10 https://github.com/cocos2d/cocos2d-x for a cust
 
 It uses SDL1.3 and OpenglES2.
 
-All the engine is compiled along with the game.
 
-Some sources are not compiled, 3D support is not completed.
+Some sources are not compiled, 3D support is not completed. Javascript bindings are missing and Lua too. 
+
+
+**Basic instructions**
+Set SDK path in Makefile.lib and Makefile.gamelink
+Set specific flags for your ARM board.
+
+
+Gstreamer is not needed so you can remove it.
+
+
+
 
 
 
