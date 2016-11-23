@@ -25,8 +25,8 @@
 #include "CSLoader.h"
 
 #include "base/ObjectFactory.h"
+#include "../../../ui/CocosGUI.h"
 
-#include "../../cocos/ui/CocosGUI.h"
 #include "CCActionTimelineCache.h"
 #include "CCActionTimeline.h"
 #include "CCActionTimelineNode.h"

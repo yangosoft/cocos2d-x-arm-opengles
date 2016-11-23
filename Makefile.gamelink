@@ -1,0 +1,36 @@
+
+SOURCES=./mygame/main.cpp \
+./mygame/AppDelegate.cpp \
+./mygame/HelloWorldScene.cpp 
+
+
+
+SDK_ROOT=/home/devel/sdk-arm/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi
+TARGET = mygamelinked
+CXXFLAGS=-std=c++11 -O3
+CPPFLAGS=-I./ -I${SDK_ROOT}/usr/include -I./external -I${SDK_ROOT}/usr/local/include/GLFW/ -I${SDK_ROOT}/usr/include/freetype2/ 
+DEFINES=-DPLATFORM="iMX6x" -DUSE_NEON32=1 -DINCLUDE_NEON32=1 -DGL_ES -DEGL_API_FB -DLINUX -DUSE_SOC_MX6 -DLINUX  -DEGL_API_FB -DGPU_TYPE_VIV -DGL_GLEXT_PROTOTYPES -DENABLE_GPU_RENDER_20 -DEGL_EGLEXT_PROTOTYPES
+CFLAGS=-I./ -I${SDK_ROOT}/usr/include -I./external -I${SDK_ROOT}/usr/local/include/GLFW/ -I${SDK_ROOT}/usr/include/freetype2/ 
+
+OBJECTS= $(SOURCES:.cpp=.o) 
+OBJECST2= $(patsubst %.cc,%.o,$(SOURCES_CC)) 
+
+
+
+OBJECTS_C = $(patsubst %.c,%.o,$(SOURCES_C:.c=.o))
+
+LIBS=-L. -lcocos2d -L/home/devel/sdk-arm/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lSDL_image -lSDL -L/home/devel/sdk-arm/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lm `pkg-config --libs --cflags libpng`  -lz -ljpeg -lpng -lfreetype -lfontconfig -lgstreamer-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lxml2 -lglib-2.0 -lgstapp-1.0   -L/home/devel/sdk-arm/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/lib -lEGL -lGAL -lCLC -lGLSLC -lVDK -lGLESv2 -lsqlite3 -lcurl
+
+%.o: %.cpp 
+	@echo " "
+	@echo "[CPP] Compiling $<"
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(DEFINES) -c $< -o $@ 
+	
+
+
+all: $(OBJECTS) 
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(DEFINES) $^  $(LIBS)    -o $(TARGET)
+	
+clean:
+	find -name "*.o" -exec rm {} \; || true
+	rm $(TARGET) || true
